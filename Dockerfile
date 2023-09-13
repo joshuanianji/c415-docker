@@ -30,3 +30,10 @@ RUN curl https://www.antlr.org/download/antlr-4.13.0-complete.jar -o antlr-4.13.
 ENV ANTLR_JAR="${ANTLR_INS}/bin/antlr-4.13.0-complete.jar"
 ENV CLASSPATH="$ANTLR_JAR:$CLASSPATH"
 COPY files/.bashrc /root/.bashrc
+
+WORKDIR /root
+RUN git clone --depth 1 https://github.com/cmput415/Tester.git
+WORKDIR /root/Tester/build
+RUN cmake .. && make
+
+ENV PATH="/root/Tester/bin/:$PATH"
