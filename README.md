@@ -1,3 +1,3 @@
-# c415-docker
+# C415 Docker
 
-Docker image for CMPUT 415, primarily got Github Actions
+Docker image(s) for CMPUT 415, primarily for Github Actions
