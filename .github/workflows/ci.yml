@@ -22,7 +22,7 @@ jobs:
         uses: docker/build-push-action@v4.2.1
         with:
           context: .
-          push: false
+          load: true
           tags: test
           cache-from: type=gha
           cache-to: type=gha,mode=max
