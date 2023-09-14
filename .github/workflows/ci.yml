@@ -59,7 +59,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ github.actor }}/c415-docker
+          images: ghcr.io/${{ github.repository }}
           tags: |
             type=sha
 
