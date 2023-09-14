@@ -3,7 +3,7 @@ FROM ubuntu:20.04
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && \
-    apt-get install build-essential pkg-config uuid-dev openjdk-17-jre git cmake curl -y && \
+    apt-get install build-essential pkg-config uuid-dev openjdk-17-jre git cmake curl wget -y && \
     apt-get clean
 
 # $HOME is `/root`
@@ -38,3 +38,10 @@ WORKDIR /root/Tester/build
 RUN cmake .. && make
 
 ENV PATH="/root/Tester/bin/:$PATH"
+
+# Install Ninja
+RUN wget https://github.com/ninja-build/ninja/releases/download/v1.11.1/ninja-linux.zip -O /usr/local/bin/ninja-linux.gz && \
+    gunzip /usr/local/bin/ninja-linux.gz && \
+    chmod +x /usr/local/bin/ninja-linux && \
+    ln -s /usr/local/bin/ninja-linux /usr/local/bin/ninja && \
+    rm -f /usr/local/bin/ninja-linux.gz
