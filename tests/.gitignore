@@ -1,0 +1,6 @@
+# these are created when we test our docker container
+# since we create a volume that links our demo folder with the `/demo` inside the container
+# the make command inside the container also affects our files locally
+demo/gen
+*.o
+demo/tool
