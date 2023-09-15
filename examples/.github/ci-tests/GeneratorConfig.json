@@ -1,0 +1,20 @@
+{
+  "inDir": "$PWD/tests/input",
+  "outDir": "$PWD/tests/output",
+  "testedExecutablePaths": {
+    "jnji": "$PWD/bin/generator"
+  },
+  "toolchains": {
+    "interpreter": [
+      {
+        "stepName": "generator-interpreter",
+        "executablePath": "$EXE",
+        "arguments": [
+          "$INPUT",
+          "$OUTPUT"
+        ],
+        "output": "generator.out"
+      }
+    ]
+  }
+}

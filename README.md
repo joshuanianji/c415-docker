@@ -4,7 +4,7 @@ Docker image(s) for CMPUT 415, primarily for Github Actions
 
 ## Usage
 
-TODO: does this actually work?
+Check out [example](./example) folder for a sample Github Actions workflow.
 
 ## Included Software
 

@@ -1,0 +1,40 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container: ghcr.io/joshuanianji/c415-docker:latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # we are currently in the root of the project (i think)
+      # The commands I've gotten here are ripped straight from what CLion uses, but I use relative paths
+      - name: Build
+        run: |
+          cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=ninja -G Ninja \
+            -S . \
+            -B ./cmake-build-debug
+          cmake --build cmake-build-debug --target all -j 8
+
+      # edit .github/ci-tests/GeneratorConfig.json and replace $PWD with $(pwd)
+      # Then, run the tester with this "new" Generator Config
+      - name: Run Tester
+        run: |
+          sed -e "s+\$PWD+$(pwd)+g" .github/ci-tests/GeneratorConfig.json > .github/ci-tests/GeneratorConfigReplaced.json
+          echo 'Running tester with the following config:'
+          cat .github/ci-tests/GeneratorConfigReplaced.json
+          tester .github/ci-tests/GeneratorConfigReplaced.json > output.txt 2>&1
+
+      # https://github.blog/2022-05-09-supercharging-github-actions-with-job-summaries/
+      - name: Generate Summary
+        run: |
+          echo "# Test Summary" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY 
+          cat "output.txt" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
