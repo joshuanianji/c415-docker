@@ -29,7 +29,7 @@ jobs:
           sed -e "s+\$PWD+$(pwd)+g" .github/ci-tests/GeneratorConfig.json > .github/ci-tests/GeneratorConfigReplaced.json
           echo 'Running tester with the following config:'
           cat .github/ci-tests/GeneratorConfigReplaced.json
-          tester .github/ci-tests/GeneratorConfigReplaced.json > output.txt 2>&1
+          tester .github/ci-tests/GeneratorConfigReplaced.json | tee output.txt
 
       # https://github.blog/2022-05-09-supercharging-github-actions-with-job-summaries/
       - name: Generate Summary
