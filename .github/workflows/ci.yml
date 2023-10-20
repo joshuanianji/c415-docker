@@ -44,7 +44,6 @@ jobs:
           file: Dockerfile.mlir
           build-args: |
             BASE_IMG=ghcr.io/${{ github.repository }}:base
-          push: test
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -80,7 +79,6 @@ jobs:
       - name: Build Base
         uses: docker/build-push-action@v5
         with:
-          push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta-base.outputs.tags }}
           labels: ${{ steps.meta-base.outputs.labels }}
           cache-from: type=gha
@@ -100,7 +98,6 @@ jobs:
           file: Dockerfile.mlir
           build-args: |
             BASE_IMG=ghcr.io/${{ github.repository }}:base
-          push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta-mlir.outputs.tags }}
           labels: ${{ steps.meta-mlir.outputs.labels }}
           cache-from: type=gha
