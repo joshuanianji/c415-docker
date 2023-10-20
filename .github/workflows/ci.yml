@@ -36,7 +36,7 @@ jobs:
       # this should compile without any warnings or errors!
       - name: Test
         run: |
-          docker run -v "$(pwd)"/tests/demo:/demo test bash -c "cd /demo && make"
+          docker run -v "$(pwd)"/tests/demo:/demo base-test bash -c "cd /demo && make"
 
       - name: Build MLIR
         uses: docker/build-push-action@v5
