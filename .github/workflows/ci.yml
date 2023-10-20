@@ -16,6 +16,14 @@ permissions:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    # use a local registry so we can reference other images
+    services:
+      registry:
+        image: registry:2
+        ports:
+          - 5000:5000
+    env:
+      BASE_TAG: localhost:5000/base-test:latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -27,8 +35,8 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          load: true
-          tags: base-test
+          push: true
+          tags: ${{ env.BASE_TAG }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -43,9 +51,10 @@ jobs:
         with:
           file: Dockerfile.mlir
           build-args: |
-            BASE_IMG=base-test
+            BASE_IMG=${{ env.BASE_TAG}}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          load: true
 
   deploy:
     runs-on: ubuntu-latest
