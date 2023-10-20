@@ -56,20 +56,40 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       # so I really need this?
-      - name: Docker meta
-        id: meta
+      - name: Docker meta (Base)
+        id: meta-base
         uses: docker/metadata-action@v5
         with:
           images: ghcr.io/${{ github.repository }}
+          # set latest tag for default branch
           tags: |
-            type=sha
-            # set latest tag for default branch
+            type=raw,value=base
             type=raw,value=latest,enable={{is_default_branch}}
 
-      - name: Build Image
+      - name: Build Base
         uses: docker/build-push-action@v5
         with:
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.meta-base.outputs.tags }}
+          labels: ${{ steps.meta-base.outputs.labels }}
+          cache-from: type=gha
+
+      - name: Docker meta (mlir)
+        id: meta-mlir
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}
+          # set latest tag for default branch
+          tags: |
+            type=raw,value=latest-mlir,enable={{is_default_branch}}
+
+      - name: Build MLIR
+        uses: docker/build-push-action@v5
+        with:
+          file: Dockerfile.mlir
+          build-args: |
+            BASE_IMG=ghcr.io/${{ github.repository }}:base
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta-mlir.outputs.tags }}
+          labels: ${{ steps.meta-mlir.outputs.labels }}
           cache-from: type=gha
